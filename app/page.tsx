@@ -22,6 +22,18 @@ export default function Home() {
     }
     setEmail({ ...email, isValid: true });
   }
+  const handleSignInClick = async () => {
+    const res = await fetch("/api/auth/signin", {
+      method: "POST",
+      body: JSON.stringify({
+        email:email.value,
+        password,
+      }),
+    });
+    console.log(res);
+    console.log(await res.json());
+
+  };
   return (
     <div className="h-screen grid grid-cols-1 sm:grid-cols-2">
       <LandingText />
@@ -61,7 +73,12 @@ export default function Home() {
               </Text>
             </div>
             <div className="mt-8">
-              <Button className="w-full before:bg-indigo-600">Sign In</Button>
+              <Button
+                className="w-full before:bg-indigo-600"
+                onClick={handleSignInClick}
+              >
+                Sign In
+              </Button>
             </div>
           </Field>
         </div>
