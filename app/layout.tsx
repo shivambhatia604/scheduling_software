@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-
+import QueryClientWrapper from "./components/QueryClientWrapper";
+import Notification from "@/ui/atoms/notification";
+import { NotificationProvider } from "@/ui/context/NotificationContext";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -26,12 +28,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <NotificationProvider>
+          <QueryClientWrapper>{children}</QueryClientWrapper>
+          <Notification />
+        </NotificationProvider>
       </body>
     </html>
   );

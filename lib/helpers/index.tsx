@@ -12,8 +12,8 @@ export const validateSignInData = (email: string, password: string) => {
   }
 
   // Validate password length (minimum 6 characters)
-  if (password.length < 8) {
-    return "Password must be at least 8 characters long";
+  if (password.length < 6) {
+    return "Password must be at least 6 characters long";
   }
 
   // If everything is valid, return null (no errors)
