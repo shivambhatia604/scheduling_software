@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryClientWrapper from "./components/QueryClientWrapper";
 import Notification from "@/ui/atoms/notification";
 import { NotificationProvider } from "@/ui/context/NotificationContext";
+import SideBar from "./components/sidebar";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -34,7 +35,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NotificationProvider>
-          <QueryClientWrapper>{children}</QueryClientWrapper>
+          <QueryClientWrapper>
+            <SideBar>{children}</SideBar>
+          </QueryClientWrapper>
+
           <Notification />
         </NotificationProvider>
       </body>
