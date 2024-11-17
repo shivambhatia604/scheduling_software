@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -13,7 +13,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 
 model User {
   id                    Int      @id @default(autoincrement())
@@ -27,4 +26,17 @@ model User {
   resetTokenExp        DateTime?
   createdAt            DateTime    @default(now())
   updatedAt            DateTime    @updatedAt
+  bookings Booking[]
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  startdate   DateTime
+  enddate     DateTime
+  summary     String?
+  description String? @default("Please join the meeting on the scheduled time")
+  location    String?
+  email       String
+  createdby   User     @relation(fields: [userid], references: [id])
+  userid      Int
 }

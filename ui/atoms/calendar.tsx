@@ -32,6 +32,8 @@ function generateTimeSlots() {
     slots.push(timeLabel);
     startTime.setMinutes(startTime.getMinutes() + 30); // Increment by 30 minutes
   }
+  slots.push("23:59");
+   
 
   return slots;
 }
@@ -67,11 +69,27 @@ function isToday(date: any) {
   );
 }
 
-export default function Calendar() {
+export default function Calendar({
+  handleDateSelect,
+  selectedDate,
+  handleToTimeSelect,
+  handleFromTimeSelect,
+  fromTime,
+  toTime,
+}: {
+  handleDateSelect: (day: {
+    date: Date;
+    isCurrentMonth: boolean;
+    isToday: boolean;
+  }) => void;
+  selectedDate: Date;
+  handleToTimeSelect: (time: string) => void;
+  handleFromTimeSelect: (time: string) => void;
+  fromTime: string;
+  toTime: string;
+}) {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth()); // January
-  const [fromTime, setFromTime] = useState("");
-  const [toTime, setToTime] = useState("");
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const days = getDaysInMonth(currentYear, currentMonth);
   const timeSlots = generateTimeSlots();
 
@@ -96,6 +114,11 @@ export default function Calendar() {
       </h2>
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
         <div className="mt-10 text-center lg:col-start-7 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-9">
+          <div className="p-2 m-2">Current timezone:{" "}
+          <span className="font-bold">
+            {Intl.DateTimeFormat().resolvedOptions().timeZone}
+            </span>
+            </div>
           <div className="flex items-center text-gray-900">
             <button
               type="button"
@@ -133,10 +156,16 @@ export default function Calendar() {
             {days.map((day, dayIdx) => (
               <button
                 key={dayIdx}
+                onClick={() => {
+                  if (day.date) {
+                    handleDateSelect(day);
+                  }
+                }}
                 type="button"
                 className={`py-1.5 ${
-                  day.isCurrentMonth ? "bg-white" : "bg-gray-50"
-                } ${
+                  selectedDate.getDate() === day?.date?.getDate() &&
+                  "bg-indigo-300"
+                } ${day.isCurrentMonth ? "bg-white" : "bg-gray-50"} ${
                   day.isToday
                     ? "text-indigo-600 font-semibold"
                     : "text-gray-900"
@@ -163,7 +192,7 @@ export default function Calendar() {
             <select
               id="fromTime"
               value={fromTime}
-              onChange={(e) => setFromTime(e.target.value)}
+              onChange={(e) => handleFromTimeSelect(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               <option value="">Select a time</option>
@@ -184,7 +213,7 @@ export default function Calendar() {
             <select
               id="toTime"
               value={toTime}
-              onChange={(e) => setToTime(e.target.value)}
+              onChange={(e) => handleToTimeSelect(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               <option value="">Select a time</option>

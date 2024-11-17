@@ -17,6 +17,8 @@
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.11",
+    "ical-generator": "^8.0.1",
+    "ical.js": "^2.1.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.0.2",
     "next-auth": "^4.24.10",
