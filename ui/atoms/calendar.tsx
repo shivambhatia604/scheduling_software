@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
-
 function getDaysInMonth(year: any, month: any) {
   const date = new Date(year, month, 1);
   const days = [];
@@ -48,7 +47,6 @@ export default function Calendar({
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const days = getDaysInMonth(currentYear, currentMonth);
-  
 
   function previousMonth() {
     setCurrentMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1));
@@ -117,9 +115,12 @@ export default function Calendar({
               }}
               type="button"
               className={`py-1.5 ${
-                selectedDate.getDate() === day?.date?.getDate() &&
-                "bg-indigo-300"
-              } ${day.isCurrentMonth ? "bg-white" : "bg-gray-50"} ${
+                selectedDate.getDate() === day?.date?.getDate()
+                  ? "bg-indigo-300"
+                  : day.isCurrentMonth
+                  ? "bg-white"
+                  : "bg-gray-50"
+              } ${
                 day.isToday ? "text-indigo-600 font-semibold" : "text-gray-900"
               } hover:bg-gray-100 focus:z-10`}
             >
@@ -131,8 +132,6 @@ export default function Calendar({
             </button>
           ))}
         </div>
-
-        
       </div>
     </div>
   );
