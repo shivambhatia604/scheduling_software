@@ -96,91 +96,22 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         <Sidebar>
           <SidebarHeader>
             <Dropdown>
-              <DropdownButton as={SidebarItem} className="lg:mb-2.5">
-                <Avatar src="/tailwind-logo.svg" />
-                <SidebarLabel>Tailwind Labs</SidebarLabel>
-                <ChevronDownIcon />
+              <DropdownButton disabled as={SidebarItem} className="lg:mb-2.5">
+                <Avatar src="./avatar.png" />
+                <SidebarLabel>Book My Calendar</SidebarLabel>
               </DropdownButton>
-              <DropdownMenu
-                className="min-w-80 lg:min-w-64"
-                anchor="bottom start"
-              >
-                <DropdownItem href="/teams/1/settings">
-                  <Cog8ToothIcon />
-                  <DropdownLabel>Settings</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="/teams/1">
-                  <Avatar slot="icon" src="/tailwind-logo.svg" />
-                  <DropdownLabel>Tailwind Labs</DropdownLabel>
-                </DropdownItem>
-                <DropdownItem href="/teams/2">
-                  <Avatar
-                    slot="icon"
-                    initials="WC"
-                    className="bg-purple-500 text-white"
-                  />
-                  <DropdownLabel>Workcation</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="/teams/create">
-                  <PlusIcon />
-                  <DropdownLabel>New team&hellip;</DropdownLabel>
-                </DropdownItem>
-              </DropdownMenu>
             </Dropdown>
-            <SidebarSection className="max-lg:hidden">
-              <SidebarItem href="/search">
-                <MagnifyingGlassIcon />
-                <SidebarLabel>Search</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/inbox">
-                <InboxIcon />
-                <SidebarLabel>Inbox</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection>
+          
           </SidebarHeader>
           <SidebarBody>
             <SidebarSection>
-              <SidebarItem href="/">
+              <SidebarItem href="/dashboard">
                 <HomeIcon />
                 <SidebarLabel>Home</SidebarLabel>
               </SidebarItem>
               <SidebarItem href="/events">
                 <Square2StackIcon />
                 <SidebarLabel>Events</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/orders">
-                <TicketIcon />
-                <SidebarLabel>Orders</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/settings">
-                <Cog6ToothIcon />
-                <SidebarLabel>Settings</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/broadcasts">
-                <MegaphoneIcon />
-                <SidebarLabel>Broadcasts</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection>
-            <SidebarSection className="max-lg:hidden">
-              <SidebarHeading>Upcoming Events</SidebarHeading>
-              <SidebarItem href="/events/1">
-                Bear Hug: Live in Concert
-              </SidebarItem>
-              <SidebarItem href="/events/2">Viking People</SidebarItem>
-              <SidebarItem href="/events/3">Six Fingers — DJ Set</SidebarItem>
-              <SidebarItem href="/events/4">We All Look The Same</SidebarItem>
-            </SidebarSection>
-            <SidebarSpacer />
-            <SidebarSection>
-              <SidebarItem href="/support">
-                <QuestionMarkCircleIcon />
-                <SidebarLabel>Support</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/changelog">
-                <SparklesIcon />
-                <SidebarLabel>Changelog</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
           </SidebarBody>
@@ -189,7 +120,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
                   <Avatar
-                    src="/profile-photo.jpg"
+                    src="/avatar.png"
                     className="size-10"
                     square
                     alt=""

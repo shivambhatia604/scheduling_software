@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { Button } from "@/ui/atoms/button";
 import {
@@ -16,6 +16,8 @@ import { emailRegex } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "@/ui/context/NotificationContext";
 import { useRouter } from "next/navigation";
+import MeetingsCard from "../components/MeetingsCard";
+import Time from "@/ui/atoms/time";
 
 export default function BookingModal({
   isOpen,
@@ -99,12 +101,12 @@ export default function BookingModal({
     onSuccess: async (data, variables) => {
       if (data.statusText === "OK") {
         const res = await data.json();
-        console.log(res,"res")
+        console.log(res, "res");
         showNotification(data.statusText, res.message, "success");
         handleModalState();
       } else {
         const errRes = await data.json();
-        console.log(errRes,'errres')
+        console.log(errRes, "errres");
         showNotification(data.statusText, errRes.error, "error");
       }
     },
@@ -149,14 +151,21 @@ export default function BookingModal({
           Please fill in all the required details to schedule a meeting.
         </DialogDescription>
         <DialogBody>
-          <Calendar
-            handleDateSelect={handleDateSelect}
-            handleToTimeSelect={handleToTimeSelect}
-            handleFromTimeSelect={handleFromTimeSelect}
-            fromTime={fromTime}
-            toTime={toTime}
-            selectedDate={date}
-          />
+          <div className="flex flex-col md:flex-row justify-between md:items-start">
+            <MeetingsCard className="grow" />
+            <div className="grow">
+              <Calendar
+                handleDateSelect={handleDateSelect}
+                selectedDate={date}
+              />
+              <Time
+                handleToTimeSelect={handleToTimeSelect}
+                handleFromTimeSelect={handleFromTimeSelect}
+                fromTime={fromTime}
+                toTime={toTime}
+              />
+            </div>
+          </div>
           <Field>
             <Label>Email</Label>
             <Input
