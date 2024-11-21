@@ -43,6 +43,9 @@ export async function getToken({ req }: { req: NextRequest }) {
   const token =
     req.cookies.get("token")?.value ??
     req.headers.get("authorization")?.replace("Bearer ", "");
+  if (!token) {
+    return null;
+  }
   const payload = await verifyToken(token, secret);
   return payload;
 }

@@ -1,11 +1,11 @@
 import prisma from "@/prisma/prismaClient";
 import bcrypt from "bcryptjs";
-import signupSchema from "@/app/api/auth/utils/validations/signupSchema";
+import signupSchema from "@/app/api/utils/validations/signupSchema";
 import checkIfUserExists from "./checkIfUserExists";
 import { NextResponse, type NextRequest } from "next/server";
 import { signToken } from "@/lib/helpers/jwt";
-import { generateVerificationToken } from "../utils/tokens";
-import { sendVerificationEmail } from "../utils/mails/mail";
+import { generateVerificationToken } from "../../utils/tokens";
+import { sendVerificationEmail } from "../../utils/mails/mail";
 export async function POST(request: NextRequest) {
   try {
     const signupData = await request.json();

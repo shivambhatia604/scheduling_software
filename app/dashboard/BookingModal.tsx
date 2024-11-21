@@ -101,7 +101,7 @@ export default function BookingModal({
         const res = await data.json();
         console.log(res,"res")
         showNotification(data.statusText, res.message, "success");
-        // handleModalState();
+        handleModalState();
       } else {
         const errRes = await data.json();
         console.log(errRes,'errres')
