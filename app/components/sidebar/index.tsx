@@ -1,3 +1,5 @@
+"use client";
+import { signoutAction } from "@/lib/actions/signout";
 import { Avatar } from "@/ui/atoms/avatar";
 import {
   Dropdown,
@@ -25,6 +27,7 @@ import {
   SidebarSpacer,
 } from "@/ui/atoms/sidebar";
 import { SidebarLayout } from "@/ui/atoms/sidebar-layout";
+import { useNotification } from "@/ui/context/NotificationContext";
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronDownIcon,
@@ -46,8 +49,12 @@ import {
   Square2StackIcon,
   TicketIcon,
 } from "@heroicons/react/20/solid";
+import { signOut } from "next-auth/react";
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
+
+  const {showNotification}=useNotification();
+
   return (
     <SidebarLayout
       navbar={
@@ -155,7 +162,13 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
                   <DropdownLabel>Share feedback</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="/logout">
+                <DropdownItem
+                  onClick={() => (function (){
+                    signoutAction();
+                    showNotification("Logged Out Successfully");
+                    // TODO FIX: show notification timer bar bug if signed out before sign in toast was completed
+                  })()}
+                >
                   <ArrowRightStartOnRectangleIcon />
                   <DropdownLabel>Sign out</DropdownLabel>
                 </DropdownItem>
