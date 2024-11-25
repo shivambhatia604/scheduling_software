@@ -19,3 +19,19 @@ export const validateSignInData = (email: string, password: string) => {
   // If everything is valid, return null (no errors)
   return null;
 };
+
+export const convertDateToStartUTCDateTime = (date: Date) => {
+  const localDate = new Date(date);
+
+  localDate.setHours(0, 0, 0, 0);
+
+  // const timeZoneOffsetInMillSec = localDate.getTimezoneOffset() * 60 * 1000;
+
+  // const utcStartOfDay = new Date(localDate.getTime() - timeZoneOffsetInMillSec);
+  return localDate.toISOString();
+};
+
+export const convertToDateTimeToCurrentTimezone = (date: Date) => {
+
+  // const 
+};

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const Loader = ({ className, ...props }:{className?: string}) => {
+const Loader = ({ className, ...props }: { className?: string }) => {
   return (
     <div
       className={clsx([
@@ -8,7 +8,7 @@ const Loader = ({ className, ...props }:{className?: string}) => {
         "items-center",
         "justify-center",
         "min-h-screen",
-        "bg-gray-100",
+        "bg-transparent",
         className,
       ])}
       {...props}

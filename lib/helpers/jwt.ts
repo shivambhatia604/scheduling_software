@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 
 type Token = {
-  id: number;
+  userId: number;
 };
 
 const auth_secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);

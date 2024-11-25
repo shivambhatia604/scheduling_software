@@ -63,7 +63,7 @@ export default function Home() {
       <LandingText />
       <div className="my-auto mx-8 p-8 rounded-lg hover:shadow-[inset_0px_0px_12px_4px_rgba(79,70,229,0.3)]">
         {mutation.isPending ? (
-          <Loader className="!bg-transparent !min-h-full" />
+          <Loader className="!min-h-full" />
         ) : (
           <div className="mx-auto w-9/12">
             <h1 className="font-bold text-indigo-600">

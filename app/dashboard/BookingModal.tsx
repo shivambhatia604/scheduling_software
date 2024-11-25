@@ -13,11 +13,12 @@ import { Input } from "@/ui/atoms/input";
 import { Textarea } from "@/ui/atoms/textarea";
 import Calendar from "@/ui/atoms/calendar";
 import { emailRegex } from "@/lib/constants";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNotification } from "@/ui/context/NotificationContext";
 import { useRouter } from "next/navigation";
 import MeetingsCard from "../components/MeetingsCard";
 import Time from "@/ui/atoms/time";
+import { convertDateToStartUTCDateTime } from "@/lib/helpers";
 
 export default function BookingModal({
   isOpen,
@@ -34,10 +35,10 @@ export default function BookingModal({
   const { showNotification } = useNotification();
   const router = useRouter();
 
-  console.log(email, "email");
-  console.log(date, "date");
-  console.log(fromTime, "fromTime");
-  console.log(toTime, "toTime");
+  // console.log(email, "email");
+  // console.log(date, "date");
+  // console.log(fromTime, "fromTime");
+  // console.log(toTime, "toTime");
   const isTimeSelectionValid = () => {
     const replaceFromTime = fromTime.replace(":", "");
     const replaceToTime = toTime.replace(":", "");
@@ -143,6 +144,15 @@ export default function BookingModal({
 
     //api call
   };
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["meetingsByDate"],
+    queryFn: async () => {
+      const data = await fetch(
+        `/api/getmeetings?date=${convertDateToStartUTCDateTime(new Date())}`
+      );
+      return await data.json();
+    },
+  });
   return (
     <>
       <Dialog open={isOpen} size="5xl" onClose={() => {}}>
@@ -151,8 +161,8 @@ export default function BookingModal({
           Please fill in all the required details to schedule a meeting.
         </DialogDescription>
         <DialogBody>
-          <div className="flex flex-col md:flex-row justify-between md:items-start">
-            <MeetingsCard className="grow" />
+          <div className="flex flex-col md:flex-row justify-between md:items-start gap-8" >
+            <MeetingsCard meetings={data.data} className="grow" />
             <div className="grow">
               <Calendar
                 handleDateSelect={handleDateSelect}

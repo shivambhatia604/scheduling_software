@@ -6,7 +6,6 @@ import { signToken } from "@/lib/helpers/jwt";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log(request);
     const { email, password } = await request.json();
 
     const validationError = validateSignInData(email, password);
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT token
-    const token =  await signToken({ userId: user.id });
+    const token = await signToken({ userId: user.id });
     // Return token as response
     //   return NextResponse.json({ token }, { status: 200 });
     // Create the response with a JSON body
@@ -48,7 +47,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 60 * 60, // 1-hour expiration
+      maxAge: 24 * 60 * 60, // 24-hour expiration
       path: "/",
     });
 

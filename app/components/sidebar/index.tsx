@@ -69,7 +69,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
             </NavbarItem>
             <Dropdown>
               <DropdownButton as={NavbarItem}>
-                <Avatar src="/profile-photo.jpg" square />
+                <Avatar src="/avatar.png" square />
               </DropdownButton>
               <DropdownMenu className="min-w-64" anchor="bottom end">
                 <DropdownItem href="/my-profile">
