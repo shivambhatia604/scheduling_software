@@ -162,7 +162,7 @@ export default function BookingModal({
         </DialogDescription>
         <DialogBody>
           <div className="flex flex-col md:flex-row justify-between md:items-start gap-8" >
-            <MeetingsCard meetings={data.data} className="grow" />
+            <MeetingsCard meetings={data?.data} className="grow" />
             <div className="grow">
               <Calendar
                 handleDateSelect={handleDateSelect}
