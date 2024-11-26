@@ -10,7 +10,7 @@ function MeetingsCard({
   isEditable = false,
   meetings,
 }: {
-  className: string;
+  className?: string;
   isEditable?: boolean;
   meetings: [{ id: number; email: string; startdate: string; summary: string }];
 }) {

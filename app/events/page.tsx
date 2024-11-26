@@ -41,12 +41,10 @@ export default function Events() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row justify-between md:items-start md:gap-x-16">
-      <MeetingsCard className="grow" isEditable meetings={data.data} />
+    <div className="grid grid-cols-1 grid-rows-2 gap-y-12 md:grid-cols-2 md:grid-rows-1 md:gap-x-12">
+      <MeetingsCard isEditable meetings={data.data} />
 
-      <div className="grow">
-        <Calendar selectedDate={date} handleDateSelect={handleDateSelect} />
-      </div>
+      <Calendar selectedDate={date} handleDateSelect={handleDateSelect} />
     </div>
   );
 }
