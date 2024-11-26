@@ -15,18 +15,18 @@ datasource db {
 }
 
 model User {
-  id                    Int      @id @default(autoincrement())
-  email                 String      @unique
-  password              String
-  name                  String?
-  isEmailVerified       Boolean     @default(false)
-  verificationToken     String?     @unique
-  verificationTokenExp  DateTime?
-  resetToken           String?     @unique
+  id                   Int       @id @default(autoincrement())
+  email                String    @unique
+  password             String
+  name                 String?
+  isEmailVerified      Boolean   @default(false)
+  verificationToken    String?   @unique
+  verificationTokenExp DateTime?
+  resetToken           String?   @unique
   resetTokenExp        DateTime?
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
-  bookings Booking[]
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  bookings             Booking[]
 }
 
 model Booking {
@@ -34,9 +34,10 @@ model Booking {
   startdate   DateTime
   enddate     DateTime
   summary     String?
-  description String? @default("Please join the meeting on the scheduled time")
+  description String?  @default("Please join the meeting on the scheduled time")
   location    String?
   email       String
   createdby   User     @relation(fields: [userid], references: [id])
   userid      Int
+  iscancelled Boolean  @default(false)
 }

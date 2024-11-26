@@ -5,7 +5,6 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const date = searchParams.get("date") || new Date();
-    console.log(date,"date");
     const minDate = new Date(date);
     const maxDate = new Date(date);
     console.log(minDate, "minDate");
@@ -23,6 +22,7 @@ export async function GET(req: NextRequest) {
           gte: minDate,
           lt: maxDate,
         },
+        iscancelled: false,
       },
     });
 

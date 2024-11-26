@@ -59,7 +59,7 @@ export default function BookingModal({
       !isTimeSelectionValid()
     );
   };
-  
+
   const handleEmailValidation = (emailObj: {
     value: string;
     isValid: boolean;
@@ -177,11 +177,13 @@ export default function BookingModal({
             </div>
           </div>
           <Field>
-            <Label>Email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
+              id="email"
               name="email"
               type="email"
               value={email.value}
+              autoComplete="on"
               placeholder="Type an email address"
               invalid={!email.isValid}
               onBlur={() => handleEmailValidation(email)}
@@ -192,11 +194,12 @@ export default function BookingModal({
             {!email.isValid && <ErrorMessage>Email is invalid</ErrorMessage>}
 
             <div className="mt-8">
-              <Label>
+              <Label htmlFor="description">
                 Description
                 <span className="text-gray-500">(Optional)</span>
               </Label>
               <Textarea
+                id="description"
                 name="description"
                 resizable={false}
                 rows={5}
