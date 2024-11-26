@@ -7,10 +7,10 @@ import { Switch } from "@/ui/atoms/switch";
 import { Button } from "@/ui/atoms/button";
 import { Text, TextLink } from "@/ui/atoms/text";
 import LandingText from "./components/Landing/landingText";
-import { emailRegex } from "@/lib/constants";
 import Loader from "./components/loader";
 import { useMutation } from "@tanstack/react-query";
 import { useNotification } from "@/ui/context/NotificationContext";
+import { isEmailValid } from "@/lib/helpers";
 
 export default function Home() {
   const [email, setEmail] = useState({ value: "", isValid: true });
@@ -39,16 +39,16 @@ export default function Home() {
       }
     },
   });
-  function validateEmail() {
-    if (email.value === "") {
-      return;
-    }
-    if (!emailRegex.test(email.value)) {
+  const handleEmailValidation = (emailObj: {
+    value: string;
+    isValid: boolean;
+  }) => {
+    if (!isEmailValid(emailObj.value)) {
       setEmail({ ...email, isValid: false });
       return;
     }
     setEmail({ ...email, isValid: true });
-  }
+  };
 
   const handleButtonDisable = () => {
     return (
@@ -77,7 +77,7 @@ export default function Home() {
                 type="email"
                 value={email.value}
                 invalid={!email.isValid}
-                onBlur={() => validateEmail()}
+                onBlur={() => handleEmailValidation(email)}
                 onChange={(e) => {
                   setEmail({ ...email, isValid: true, value: e.target.value });
                 }}

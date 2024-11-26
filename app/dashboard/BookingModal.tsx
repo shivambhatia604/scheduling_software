@@ -12,13 +12,12 @@ import { Field, Label, ErrorMessage } from "@/ui/atoms/fieldset";
 import { Input } from "@/ui/atoms/input";
 import { Textarea } from "@/ui/atoms/textarea";
 import Calendar from "@/ui/atoms/calendar";
-import { emailRegex } from "@/lib/constants";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNotification } from "@/ui/context/NotificationContext";
 import { useRouter } from "next/navigation";
 import MeetingsCard from "../components/MeetingsCard";
 import Time from "@/ui/atoms/time";
-import { convertDateToStartUTCDateTime } from "@/lib/helpers";
+import { convertDateToStartUTCDateTime, isEmailValid } from "@/lib/helpers";
 
 export default function BookingModal({
   isOpen,
@@ -60,16 +59,17 @@ export default function BookingModal({
       !isTimeSelectionValid()
     );
   };
-  function validateEmail() {
-    if (email.value === "") {
-      return;
-    }
-    if (!emailRegex.test(email.value)) {
+  
+  const handleEmailValidation = (emailObj: {
+    value: string;
+    isValid: boolean;
+  }) => {
+    if (!isEmailValid(emailObj.value)) {
       setEmail({ ...email, isValid: false });
       return;
     }
     setEmail({ ...email, isValid: true });
-  }
+  };
   const handleDateSelect = (date: {
     date: Date;
     isCurrentMonth: boolean;
@@ -161,7 +161,7 @@ export default function BookingModal({
           Please fill in all the required details to schedule a meeting.
         </DialogDescription>
         <DialogBody>
-          <div className="flex flex-col md:flex-row justify-between md:items-start gap-8" >
+          <div className="flex flex-col md:flex-row justify-between md:items-start gap-8">
             <MeetingsCard meetings={data?.data} className="grow" />
             <div className="grow">
               <Calendar
@@ -184,7 +184,7 @@ export default function BookingModal({
               value={email.value}
               placeholder="Type an email address"
               invalid={!email.isValid}
-              onBlur={() => validateEmail()}
+              onBlur={() => handleEmailValidation(email)}
               onChange={(e) => {
                 setEmail({ ...email, isValid: true, value: e.target.value });
               }}

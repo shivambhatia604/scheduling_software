@@ -19,7 +19,15 @@ export const validateSignInData = (email: string, password: string) => {
   // If everything is valid, return null (no errors)
   return null;
 };
-
+export const isEmailValid = (email: string) => {
+  if (email === "") {
+    return true;
+  }
+  if (!emailRegex.test(email)) {
+    return false;
+  }
+  return true;
+};
 export const convertDateToStartUTCDateTime = (date: Date) => {
   const localDate = new Date(date);
 
@@ -32,6 +40,5 @@ export const convertDateToStartUTCDateTime = (date: Date) => {
 };
 
 export const convertToDateTimeToCurrentTimezone = (date: Date) => {
-
-  // const 
+  // const
 };
