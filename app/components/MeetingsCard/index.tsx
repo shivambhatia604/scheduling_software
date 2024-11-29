@@ -22,7 +22,7 @@ function MeetingsCard({
       </h2>
 
       <ol className="mt-4 divide-y divide-gray-100 text-sm">
-        {meetings.map((meeting) => (
+        {meetings?.map((meeting) => (
           <li key={meeting.id} className="relative flex space-x-6 py-6">
             <img
               src="./Avatar.png"
