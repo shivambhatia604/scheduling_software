@@ -4,7 +4,6 @@ import prisma from "@/prisma/prismaClient";
 export async function POST(req: NextRequest) {
   try {
     const { meetingid } = await req.json();
-    console.log(Number(meetingid));
 
     const userId = req.headers.get("x-user-id");
     console.log(userId);

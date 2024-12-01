@@ -8,39 +8,64 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/ui/atoms/dialog";
+import { XCircleIcon } from "@heroicons/react/20/solid";
 import { Field, Label, ErrorMessage } from "@/ui/atoms/fieldset";
 import { Input } from "@/ui/atoms/input";
 import { Textarea } from "@/ui/atoms/textarea";
 import Calendar from "@/ui/atoms/calendar";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNotification } from "@/ui/context/NotificationContext";
 import { useRouter } from "next/navigation";
-import MeetingsCard from "../components/MeetingsCard";
+import MeetingsCard from "../MeetingsCard";
 import Time from "@/ui/atoms/time";
 import { convertDateToStartUTCDateTime, isEmailValid } from "@/lib/helpers";
 
 export default function BookingModal({
   isOpen,
   handleModalState,
+  isEditModal = false,
+  editModalMeetingId,
+  editModalEmail = "",
+  editModalbody,
+  editModalDate = new Date(),
+  editModalfromTime = "00:00",
+  editModaltoTime = "00:00",
 }: {
   isOpen: boolean;
   handleModalState: () => void;
+  isEditModal?: boolean;
+  editModalMeetingId?: number | undefined;
+  editModalEmail?: string;
+  editModalbody?: string;
+  editModalDate?: Date;
+  editModalfromTime?: string;
+  editModaltoTime?: string;
 }) {
-  const [email, setEmail] = useState({ value: "", isValid: true });
-  const [body, setBody] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [fromTime, setFromTime] = useState("");
-  const [toTime, setToTime] = useState("");
+  console.log(isEditModal, editModalDate, editModalEmail);
+  const [email, setEmail] = useState({
+    value: isEditModal ? editModalEmail : "",
+    isValid: true,
+  });
+  const [body, setBody] = useState(isEditModal ? editModalbody : "");
+  const [date, setDate] = useState(isEditModal ? editModalDate : new Date());
+  const [fromTime, setFromTime] = useState(
+    isEditModal ? editModalfromTime : ""
+  );
+  const [toTime, setToTime] = useState(isEditModal ? editModaltoTime : "");
   const { showNotification } = useNotification();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  // console.log(email, "email");
-  // console.log(date, "date");
-  // console.log(fromTime, "fromTime");
-  // console.log(toTime, "toTime");
+  console.log(email, "email");
+  console.log(date, "date");
+  console.log(fromTime, "fromTime");
+  console.log(toTime, "toTime");
+  const addOrUpdateBookingApi = isEditModal
+    ? "/api/updatemeeting"
+    : "/api/createmeeting";
   const isTimeSelectionValid = () => {
-    const replaceFromTime = fromTime.replace(":", "");
-    const replaceToTime = toTime.replace(":", "");
+    const replaceFromTime = fromTime?.replace(":", "");
+    const replaceToTime = toTime?.replace(":", "");
 
     const convertedFromTime = parseInt(replaceFromTime);
     const convertedToTime = parseInt(replaceToTime);
@@ -90,21 +115,28 @@ export default function BookingModal({
       summary: string;
       description?: string;
       location?: string;
-      email: string;
+      email?: string;
+      meetingid?: number;
     }) => {
-      return fetch("/api/createmeeting", {
+      return fetch(addOrUpdateBookingApi, {
         method: "POST",
         body: JSON.stringify({
           ...payload,
         }),
       });
     },
-    onSuccess: async (data, variables) => {
+    onSuccess: async (data) => {
       if (data.statusText === "OK") {
         const res = await data.json();
         console.log(res, "res");
         showNotification(data.statusText, res.message, "success");
         handleModalState();
+        queryClient.invalidateQueries({
+          queryKey: [
+            "meetingsByDate",
+            convertDateToStartUTCDateTime(editModalDate),
+          ],
+        });
       } else {
         const errRes = await data.json();
         console.log(errRes, "errres");
@@ -135,6 +167,7 @@ export default function BookingModal({
     const summary = "Meeting";
     // const description = body;
     mutation.mutate({
+      meetingid: editModalMeetingId,
       startdate: startDate,
       enddate: endDate,
       summary,
@@ -156,9 +189,18 @@ export default function BookingModal({
   return (
     <>
       <Dialog open={isOpen} size="5xl" onClose={() => {}}>
-        <DialogTitle>Schedule a Meeting</DialogTitle>
+      <Button className="!absolute right-1 top-1" plain onClick={() => handleModalState()}>
+          <XCircleIcon />
+          </Button>
+        <DialogTitle>
+          {isEditModal
+            ? `Edit Meeting. Meeting ID: ${editModalMeetingId}`
+            : "Schedule a Meeting"}
+        </DialogTitle>
         <DialogDescription>
-          Please fill in all the required details to schedule a meeting.
+          {`Please fill in all the required details to ${
+            isEditModal ? "edit" : "schedule"
+          } a meeting.`}
         </DialogDescription>
         <DialogBody>
           <div className="flex flex-col md:flex-row justify-between md:items-start gap-8">
@@ -183,6 +225,7 @@ export default function BookingModal({
               name="email"
               type="email"
               value={email.value}
+              disabled={isEditModal}
               autoComplete="on"
               placeholder="Type an email address"
               invalid={!email.isValid}
@@ -213,11 +256,11 @@ export default function BookingModal({
         </DialogBody>
         <DialogActions>
           <Button
-            className=" before:bg-indigo-600"
+            color="indigo"
             disabled={handleButtonDisable()}
             onClick={() => handleScheduleMeeting()}
           >
-            Schedule
+            {isEditModal ? "Update Meeting" : "Schedule"}
           </Button>
           <Button plain onClick={() => handleModalState()}>
             Cancel

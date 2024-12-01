@@ -5,16 +5,20 @@ import {
   MapPinIcon,
   EllipsisHorizontalIcon,
 } from "@heroicons/react/20/solid";
+import { Button } from "@/ui/atoms/button";
 function MeetingsCard({
   className,
   isEditable = false,
   meetings,
+  handleCancelClick,
+  handleEditClick,
 }: {
   className?: string;
   isEditable?: boolean;
   meetings: [{ id: number; email: string; startdate: string; summary: string }];
+  handleCancelClick?: (id: number) => void;
+  handleEditClick?: (meeting: object) => void;
 }) {
-  
   return (
     <div className={className}>
       <h2 className="text-base font-semibold text-gray-900">
@@ -81,20 +85,22 @@ function MeetingsCard({
                 >
                   <div className="py-1">
                     <MenuItem>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                      <Button
+                        className="w-full"
+                        plain
+                        onClick={() => handleEditClick?.(meeting)}
                       >
                         Edit
-                      </a>
+                      </Button>
                     </MenuItem>
                     <MenuItem>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                      <Button
+                        className="w-full"
+                        plain
+                        onClick={() => handleCancelClick?.(meeting.id)}
                       >
                         Cancel
-                      </a>
+                      </Button>
                     </MenuItem>
                   </div>
                 </MenuItems>
