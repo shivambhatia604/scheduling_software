@@ -1,5 +1,5 @@
 "use client";
-import { signoutAction } from "@/lib/actions/signout";
+import { signoutAction } from "@/lib/server-helpers/actions/signout";
 import { Avatar } from "@/ui/atoms/avatar";
 import {
   Dropdown,
@@ -49,11 +49,13 @@ import {
   Square2StackIcon,
   TicketIcon,
 } from "@heroicons/react/20/solid";
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
 
   const {showNotification}=useNotification();
+  const router = useRouter();
 
   return (
     <SidebarLayout
@@ -166,6 +168,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
                   onClick={() => (function (){
                     signoutAction();
                     showNotification("Logged Out Successfully");
+                    router.push('/')
                     // TODO FIX: show notification timer bar bug if signed out before sign in toast was completed
                   })()}
                 >

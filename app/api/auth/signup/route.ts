@@ -3,9 +3,9 @@ import bcrypt from "bcryptjs";
 import signupSchema from "@/app/api/utils/validations/signupSchema";
 import checkIfUserExists from "./checkIfUserExists";
 import { NextResponse, type NextRequest } from "next/server";
-import { signToken } from "@/lib/helpers/jwt";
 import { generateVerificationToken } from "../../utils/tokens";
 import { sendVerificationEmail } from "../../utils/mails/mail";
+import { createSession } from "@/lib/server-helpers/session";
 export async function POST(request: NextRequest) {
   try {
     const signupData = await request.json();
@@ -50,7 +50,6 @@ export async function POST(request: NextRequest) {
     });
 
     const { id } = newUser;
-    const token = await signToken({ id });
     const verificationToken = await generateVerificationToken(newUser.id);
     const info = await sendVerificationEmail(newUser.email, verificationToken);
     console.log("email \n", info);
@@ -61,13 +60,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 }
     );
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 24, // 1-day expiration
-      path: "/",
-    });
+await createSession({userId: id})
     return response;
   } catch (error) {
     console.log(error);

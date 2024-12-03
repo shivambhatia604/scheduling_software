@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { isResetTokenValid } from "@/lib/server-helpers/isResetTokenValid";
+import { isResetTokenValid } from "@/lib/server-helpers/data/user/isResetTokenValid";
 
 import { ResetPasswordForm } from "@/app/components/forms/reset-password-form";
 

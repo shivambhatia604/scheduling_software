@@ -1,50 +1,43 @@
 // middleware.js
-import { NextResponse, NextRequest } from "next/server";
-// import jwt from "jsonwebtoken";
-import { getToken } from "./lib/helpers/jwt";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "./lib/server-helpers/session";
 
-// const auth_secret = process.env.NEXTAUTH_SECRET || "";
-export async function middleware(
-  req: NextRequest & { user: { userId: number } }
-) {
+const protectedRoutes = ["/dashboard", "/events"];
+const publicRoutesUnaccessibleWhenAuthenticated = [
+  "/login",
+  "/signup",
+  "/",
+  "forgot-password",
+];
+const publicRoutes = [];
+export async function middleware(req: NextRequest) {
   try {
-  const user = await getToken({ req }) as  { userId: number };
-  console.log(user,"user");
-  if (user) {
-  //   req.user = { userId: user.userId };
-  // console.log(req.user,"Request user");
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-user-id", String(user.userId));
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
     const path = req.nextUrl.pathname;
-    const redirectUrl = new URL("/dashboard", req.url);
-    switch (path) {
-      case "/signup":
-        return NextResponse.redirect(redirectUrl);
+    const isProtectedRoute = protectedRoutes.includes(path);
+    const isPublicRouteUnaccessibleWhenAuthenticated =
+      publicRoutesUnaccessibleWhenAuthenticated.includes(path);
 
-      case "/":
-        return NextResponse.redirect(redirectUrl);
-      case "/forgotpassword":
-        return NextResponse.redirect(redirectUrl);
-
-      default:
-        return response;
+    // Redirect to Sign-In if the user is not authenticated
+    const session = await getToken();
+    console.log(session, "session in middleware");
+    if (isProtectedRoute && !session?.userId) {
+      return NextResponse.redirect(new URL("/", req.nextUrl));
     }
-  } else {
-    return NextResponse.next();
-  }
 
-   
+    // Redirect to /dashboard if the user is authenticated
+    if (isPublicRouteUnaccessibleWhenAuthenticated && session?.userId) {
+      return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    }
+
+    return NextResponse.next();
   } catch (error) {
     return NextResponse.json(
-      { error: "Invalid or expired token" },
-      { status: 401 }
+      { status: "error", message: "Internal Server Error" },
+      { status: 500 }
     );
   }
+
 }
 
 export const config = {

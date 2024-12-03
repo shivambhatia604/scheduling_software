@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import prisma from "@/prisma/prismaClient";
+import { auth } from "@/lib/server-helpers/sessionController";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +18,12 @@ export async function POST(request: NextRequest) {
     // if (validationError) {
     //     return NextResponse.json({ error: validationError }, { status: 400 });
     //   }
-    const userId = request.headers.get("x-user-id");
+    // const userId = request.headers.get("x-user-id");
+   const session = await auth();
+   if(!session) {
+    return NextResponse.json({ error: "not authenticated"}, { status: 400 });
+   }
+   console.log(session,"createmeeing api route")
     const booking = await prisma.booking.create({
       data: {
         startdate,
@@ -26,7 +32,7 @@ export async function POST(request: NextRequest) {
         description,
         location,
         email,
-        userid: Number(userId),
+        userid: session?.user?.id,
       },
     });
 

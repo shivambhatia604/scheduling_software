@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import {
-  EyeIcon,
-  EyeSlashIcon
-} from "@heroicons/react/24/outline";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 // import { Button } from "@/app/ui/button";
 import { useActionState, useEffect } from "react";
-import { resetPasswordAction, State } from "@/lib/actions/forms/resetPassword";
+import {
+  resetPasswordAction,
+  State,
+} from "@/lib/server-helpers/actions/forms/resetPassword";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/ui/context/NotificationContext";
 import { Input } from "@/ui/atoms/input";
@@ -23,15 +23,16 @@ export function ResetPasswordForm({ token }: { token: string }) {
   // console.log("stateis", state);
   const router = useRouter();
   const { showNotification } = useNotification();
+
   useEffect(() => {
-    if (state.status === "success" && state.message) {
+    if (state?.status === "success" && state.message) {
       console.log(state, "wow state");
       console.log(state.message);
       showNotification(state.message); // TODO: solve ts error/ modify State type
       router.push("/");
     }
 
-    if (state.status === "error" && state.message) {
+    if (state?.status === "error" && state.message) {
       showNotification(state.message);
     }
   }, [state]);
@@ -61,8 +62,6 @@ export function ResetPasswordForm({ token }: { token: string }) {
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
               <EyeIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-
-
             </div>
           </div>
           <div id="new-password-error" aria-live="polite" aria-atomic="true">
@@ -125,13 +124,12 @@ export function ResetPasswordForm({ token }: { token: string }) {
         </div> */}
       </div>
       <div className="mt-6 flex justify-end gap-4">
-        <Link
-          href="/dashboard/invoices"
-          className="content-center"
-        >
+        <Link href="/" className="content-center">
           Cancel
         </Link>
-        <Button type="submit" className="h-10">Reset Password</Button>
+        <Button type="submit" className="h-10">
+          Reset Password
+        </Button>
       </div>
     </form>
   );

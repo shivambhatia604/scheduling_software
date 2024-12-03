@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import prisma from "@/prisma/prismaClient";
 import { validateSignInData } from "@/lib/helpers/index";
-import { signToken } from "@/lib/helpers/jwt";
+import { createSession } from "@/lib/server-helpers/session";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,10 +32,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate JWT token
-    const token = await signToken({ userId: user.id });
-    // Return token as response
-    //   return NextResponse.json({ token }, { status: 200 });
     // Create the response with a JSON body
     const response = NextResponse.json({
       message: "Login successful",
@@ -43,13 +39,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Set cookies in the response
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 24 * 60 * 60, // 24-hour expiration
-      path: "/",
-    });
+    await createSession({ userId: user.id });
 
     // Set custom headers in the response
     response.headers.set("Access-Control-Allow-Origin", "*");
