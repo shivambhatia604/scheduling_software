@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import  prisma  from '@/prisma/prismaClient';
 import { resetPasswordSchema } from '@/app/api/utils/validations/auth'
+import { z } from 'zod';
 
 export async function POST(req: Request) {
   try {

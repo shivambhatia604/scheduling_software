@@ -3,6 +3,7 @@ import prisma from '@/prisma/prismaClient';
 import { forgotPasswordSchema } from '@/app/api/utils/validations/auth'
 import { generatePasswordResetToken } from '@/app/api/utils/tokens';
 import { sendPasswordResetEmail } from '@/app/api/utils/mails/mail';
+import { z } from 'zod';
 
 
 export async function POST(req: Request) {
